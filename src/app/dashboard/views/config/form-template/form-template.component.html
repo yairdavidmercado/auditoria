@@ -1,0 +1,185 @@
+<!-- <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label>First Name</label>
+        <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors.required">Email is required</div>
+            <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+            <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Register</button>
+    </div>
+</form> -->
+<section class="content">
+    <div class="container-fluid" style="padding: 2%;">
+        <div class="row" >
+            <div class="col-md-9">
+                
+                <form class="card card-primary">
+                    <div class="float-right">
+                        <nav class="navbar navbar-expand-md navbar-light bg-light">
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#"><i class="nav-icon fas fa-cog"></i> Configuración </a>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown" style="margin-right: 12px;">
+                                        
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="card-body" style="font-size: 11px; text-align: justify;">
+                        <select class="form-control" style="margin-bottom: 6px;" (change)="formulario($event.target.value)" name="" id="">
+                            <option value="1">Seleccionar perfil </option>
+                            <option *ngFor="let item of perfiles; index as i; first as isFirst" value="{{item.perfil}}"> {{item.descripcion}}</option>
+                        </select>
+                        <ng-container *ngFor="let item of dataForm; index as i; first as isFirst">
+                            <div class="{{item.class}}" >
+                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                    <div class="{{item.class}}">
+                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                            <div class="{{item.class}}">
+                                                <p *ngIf="item.class == 'card-title'" class="{{item.class}}"><a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a></p>
+                                                <div *ngIf="item.class == 'row'" >
+                                                    <div class="float-right" for="">
+                                                        <label for="">Sección donde desea crear la pregunta.</label>
+                                                        <input type="radio" name="card" style="margin-left: 6px;" [(ngModel)]="idRadioDependencia" value="{{item.id}}" id="">
+                                                    </div>
+                                                </div>
+                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                    <div class="{{item.class}}" style="border: 1px solid #369; border-radius: 1em/1em;">
+                                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                            <p *ngIf="item.etiqueta == 'p'" ><a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a></p>
+                                                            <div class="{{item.class}}">
+                                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                    <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input *ngIf="item.etiqueta == 'input'" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                            <label *ngIf="item.etiqueta == 'input'" style="margin-left: 5px;" for="radioPrimary{{item.id}}">
+                                                                                <a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a>
+                                                                            </label>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                        <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
+                                                                            <p style="margin-top: 5px; margin-left: 5px;" ><a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a></p>
+                                                                            <input class="form-control" type="date">
+                                                                        </div>
+                                                                    <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" ><a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a></p>
+                                                                    <textarea *ngIf="item.etiqueta == 'textarea'" class="{{item.class}}"></textarea>
+                                                                </ng-container>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button class="btn btn-success float-right" type="submit" >enviar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-3" >
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"> Crear controles</h5>
+                    </div>
+                    <div class="card-body" >
+                        <div *ngIf="idEdit.length > 0" class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Editar</label>
+                                    <textarea type="text" id="elementId" class="form-control" [(ngModel)]="valueEdit" [value]="valueEdit"></textarea>
+                                </div>   
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group">
+                                    <button type="button" (click)="updateControl(idEdit, valueEdit)" class="btn btn-success btn-sm">Guardar <i class="fas fa-save"></i></button>
+                                    <button type="button" (click)="editarValor('','')" class="btn btn-danger btn-sm">Cerrar</button>
+                                  </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                              <a class="nav-link">
+                                 <a style="cursor: pointer;" (click)="crearSeccion('1')">Crear sección</a>
+                                <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                    <i class="fas fa-question-circle"></i>
+                                </span>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('2')">Pregunta completa</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a style="cursor: pointer;" class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('3')">Pregunta básica</a>
+                                  <span class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('4')">Pregunta simple</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('5')">Pregunta y fechas</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer" >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>

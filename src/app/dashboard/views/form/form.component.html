@@ -1,0 +1,282 @@
+<section class="content">
+    <div class="container-fluid" style="padding: 2%;">
+        <div class="row" >
+            <div class="col-md-9">
+                
+                <form class="card card-primary">
+                    <div class="float-right">
+                        <nav class="navbar navbar-expand-md navbar-light bg-light">
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Auditar</a>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Auditoría en proceso</a>
+                                    </li>
+                                    <li style="cursor: pointer;" class="nav-item dropdown">
+                                        <div class="btn-group">
+                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                              Opciones
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                              <button (click)="imprimir('2')" class="dropdown-item" type="button">Imprimir hallazgo</button>
+                                              <button (click)="imprimir('1')" class="dropdown-item" type="button">Imprimir toda la auditoría</button>
+                                              <hr>
+                                              <button class="dropdown-item" style="color: red;" type="button">Anular auditoría</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="card-body" style="font-size: 11px; text-align: justify;">
+                        <ng-container *ngFor="let item of dataForm; index as i; first as isFirst">
+                            <div class="{{item.class}}" >
+                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                    <div class="{{item.class}}">
+                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                            <div class="{{item.class}}">
+                                                <p *ngIf="item.class == 'card-title'" class="{{item.class}}">{{item.value}}</p>
+                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                    <div class="{{item.class}}">
+                                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                            <p *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                            <div class="{{item.class}}">
+                                                                <span [attr.id]="item.id"></span>
+                                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                    <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                        <div class="icheck-primary d-inline" >
+                                                                            <input *ngIf="item.etiqueta == 'input'" (click)="guardarRespuesta('1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                            <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
+                                                                                {{item.value}}
+                                                                            </label>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                    <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
+                                                                        <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
+                                                                        <input class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
+                                                                    </div>
+                                                                    <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                                    <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                </ng-container>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                        <!-- <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">DATOS DE INGRESO DEL PACIENTE</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" style="font-size: 11px; text-align: justify;">
+                                    <div class="col-sm-12">
+                                        <p>Verificar que exista el anexo técnico 2 de la resolución 3047 de 2008 por medio del cual se informa la atención inicial de urgencia a la ERP.</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Verificar que exista el anexo técnico 2 de la resolución 3047 de 2008 por medio del cual se informa la atención inicial de urgencia a la ERP.</p>
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
+                                            <label for="radioPrimary1">
+                                                Cumple
+                                            </label>
+                                            </div>
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary2" name="r1">
+                                            <label for="radioPrimary2">
+                                                No cumple
+                                            </label>
+                                            </div>
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary3" name="r1">
+                                            <label for="radioPrimary3">
+                                                No aplica
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Fecha inicial</p>
+                                                <input class="form-control" type="date">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Fecha final</p>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <p>Observación</p>
+                                            <textarea name="" id="" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
+                                            <label for="radioPrimary1">
+                                                SI
+                                            </label>
+                                            </div>
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary2" name="r1">
+                                            <label for="radioPrimary2">
+                                                NO
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
+                                            <label for="radioPrimary1">
+                                                SI
+                                            </label>
+                                            </div>
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary2" name="r1">
+                                            <label for="radioPrimary2">
+                                                NO
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <p>Observación</p>
+                                            <textarea name="" id="" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
+                                            <label for="radioPrimary1">
+                                                SI
+                                            </label>
+                                            </div>
+                                            <div class="icheck-primary d-inline">
+                                            <input type="radio" id="radioPrimary2" name="r1">
+                                            <label for="radioPrimary2">
+                                                NO
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <p>Observación</p>
+                                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button class="btn btn-info float-right" (click)="terminarAuditoria()" >Terminar auditoría</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <p>Información del paciente</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                              <a class="nav-link">
+                                 <label style="font-size:10px;">AUDITORÍA</label>
+                                 <br>
+                                 <span style="font-size:12px;">{{cod_audi}}</span>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">ADMISIÓN</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['cod_admi']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">NOMBRE</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['nom_usua']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">IDENTIFICACIÓN</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['id_pacien']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">EPS</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['nom_contrato']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">REGIMEN</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['regimen']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">CAMA</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['cama']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">FECHA DE INGRESO</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['fecha_ingre']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">SERVICIO DE INGRESO</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['servicio_ingre']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">SERVICIO ACTUAL</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['servicio_actual']}}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <label style="font-size:10px;">ACCIDENTE DE TRANSITO</label>
+                                   <br>
+                                   <span style="font-size:12px;">{{dataPaciente['acc_transito']}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>

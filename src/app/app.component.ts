@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { StoreService } from "../app/services/store.service";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'apptools';
+  constructor( public _storeServises: StoreService){
+    
+  }
 }
