@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
     if (value["success"]) {
       localStorage.setItem("session", 'true')
       localStorage.setItem("dataSession", JSON.stringify(value))
-      window.location.href = '/dashboard'
+      window.location.href = ''
     }else{
       localStorage.setItem("session", 'false')
       this._router.navigate(['login'])

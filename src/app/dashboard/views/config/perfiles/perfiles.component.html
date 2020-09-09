@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col-sm-9">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 table-responsive">  
+                    <table style="font-size: 12px;" class="table table-bordered table-striped table-sm" id="accordion">
+                      <thead>
+                            <tr>
+                                <td style="width: 10px"></td>
+                                <td style="width: 10px">Id</td>
+                                <td>Nombre</td>
+                            </tr>
+                      </thead>
+                      <tbody style="font-size: 10px;" >
+                        <ng-container #table *ngFor="let item of dataPerfiles; index as i; first as isFirst" > 
+                          <tr class="card-header" id="headingOne">
+                            <td>
+                                <a style="color:slateblue; cursor: pointer;" (click)="editPerfil(item.id, item.descripcion)">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td style="cursor: pointer;">{{item.id}}</td>
+                            <td style="cursor: pointer;">{{item.descripcion}}</td>
+                        </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div *ngIf="EditPerfil == 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Crear perfil</h3>
+            </div>
+            <div class="card-body">
+                <div >
+                    <div class="form-group">
+                        <label>Nombre del perfil</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="textPerfil" [value]="textPerfil"  class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="guardarPerfil()" class="btn btn-success btn-block">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="EditPerfil != 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Crear usuario</h3>
+            </div>
+            <div class="card-body">
+                <div >
+                    <div class="form-group">
+                        <input type="text" class="form-control" disabled [value]="EditPerfil" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre del perfil</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="textPerfil" [value]="textPerfil"  class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="guardarPerfil()" class="btn btn-success btn-block">Registrar</button>
+                        <button (click)="NuevoPerfil()" class="btn btn-primary btn-block">Nuevo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

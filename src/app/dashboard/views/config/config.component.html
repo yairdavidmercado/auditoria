@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<section class="content">
+    <div class="container-fluid" style="padding-top: 2%;">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="nav-icon fas fa-cog"></i> Configuración</h4>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" >
+                        <a class="nav-link" routerLink="/dashboard/config/formtemplate" >Formularios</a>
+                        <a class="nav-link" routerLink="/dashboard/config/usuario" >Usuarios</a>
+                        <a class="nav-link" routerLink="/dashboard/config/perfiles" >Perfiles</a>
+                    </div>
+                </div>
+            </div>
+            <div style="background-color: #F8F9FA;" class="card-body">
+                <router-outlet></router-outlet>
+            </div>
+        </div>  
+    </div>
+</section>

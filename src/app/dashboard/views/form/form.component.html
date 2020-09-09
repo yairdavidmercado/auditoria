@@ -2,19 +2,19 @@
     <div class="container-fluid" style="padding: 2%;">
         <div class="row" >
             <div class="col-md-9">
-                
                 <form class="card card-primary">
                     <div class="float-right">
                         <nav class="navbar navbar-expand-md navbar-light bg-light">
-                            <div class="collapse navbar-collapse" id="navbarNav">
-                                <ul class="navbar-nav mr-auto">
+                            <div id="navbarNav">
+                                <ul class="navbar-nav">
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">Auditar</a>
                                     </li>
-                                </ul>
-                                <ul class="navbar-nav">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Auditoría en proceso</a>
+                                        <a *ngIf="terminado == 'f'" class="nav-link" >Auditoría en proceso</a>
+                                        <a *ngIf="anulado == 't' && terminado == 't' && finalizado == 'f' " class="nav-link" style="color: red;" >Auditoría anulada</a>
+                                        <a *ngIf="anulado == 'f' && terminado == 't' && finalizado == 'f' " class="nav-link" style="color: royalblue;" >Auditoría terminada</a>
+                                        <a *ngIf="finalizado == 't' " class="nav-link" style="color: rgb(6, 136, 56);" >Auditoría finalizada</a>
                                     </li>
                                     <li style="cursor: pointer;" class="nav-item dropdown">
                                         <div class="btn-group">
@@ -22,10 +22,11 @@
                                               Opciones
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                              <button (click)="imprimir('2')" class="dropdown-item" type="button">Imprimir hallazgo</button>
+                                              <button (click)="showHallazgoModal()" class="dropdown-item" type="button">Imprimir hallazgo</button>
                                               <button (click)="imprimir('1')" class="dropdown-item" type="button">Imprimir toda la auditoría</button>
                                               <hr>
-                                              <button class="dropdown-item" style="color: red;" type="button">Anular auditoría</button>
+                                              <button *ngIf="terminado == 'f' && finalizado == 'f'" (click)="openModal(template)" class="dropdown-item" style="color:sandybrown;" type="button">Anular auditoría</button>
+                                              <button *ngIf="terminado == 't' && finalizado == 'f'" (click)="openModal2(template2)" class="dropdown-item" style="color: red;" type="button">Finalizar auditoría</button>
                                             </div>
                                         </div>
                                     </li>
@@ -49,8 +50,14 @@
                                                                 <span [attr.id]="item.id"></span>
                                                                 <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
                                                                     <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
-                                                                        <div class="icheck-primary d-inline" >
-                                                                            <input *ngIf="item.etiqueta == 'input'" (click)="guardarRespuesta('1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                        <div *ngIf="terminado == 'f'" class="icheck-primary d-inline" >
+                                                                            <input *ngIf="item.etiqueta == 'input'" (click)="validarGuardarRespuesta(item.id_especial, '1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                            <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
+                                                                                {{item.value}}
+                                                                            </label>
+                                                                        </div>
+                                                                        <div *ngIf="terminado == 't'" class="icheck-primary d-inline" >
+                                                                            <input *ngIf="item.etiqueta == 'input'" disabled [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
                                                                             <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
                                                                                 {{item.value}}
                                                                             </label>
@@ -58,10 +65,16 @@
                                                                     </ng-container>
                                                                     <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
                                                                         <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
-                                                                        <input class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
+                                                                        <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
+                                                                        <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="date">
                                                                     </div>
                                                                     <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
-                                                                    <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                    <ng-container *ngIf="terminado == 'f'">
+                                                                        <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="terminado == 't'">
+                                                                        <textarea *ngIf="item.etiqueta == 'textarea'" disabled class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                    </ng-container>
                                                                 </ng-container>
                                                             </div>
                                                         </ng-container>
@@ -73,118 +86,11 @@
                                 </ng-container>
                             </div>
                         </ng-container>
-                        <!-- <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">DATOS DE INGRESO DEL PACIENTE</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row" style="font-size: 11px; text-align: justify;">
-                                    <div class="col-sm-12">
-                                        <p>Verificar que exista el anexo técnico 2 de la resolución 3047 de 2008 por medio del cual se informa la atención inicial de urgencia a la ERP.</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p>Verificar que exista el anexo técnico 2 de la resolución 3047 de 2008 por medio del cual se informa la atención inicial de urgencia a la ERP.</p>
-                                        <div class="form-group clearfix">
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
-                                            <label for="radioPrimary1">
-                                                Cumple
-                                            </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary2" name="r1">
-                                            <label for="radioPrimary2">
-                                                No cumple
-                                            </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary3" name="r1">
-                                            <label for="radioPrimary3">
-                                                No aplica
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p>Fecha inicial</p>
-                                                <input class="form-control" type="date">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p>Fecha final</p>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <p>Observación</p>
-                                            <textarea name="" id="" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
-                                        <div class="form-group clearfix">
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
-                                            <label for="radioPrimary1">
-                                                SI
-                                            </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary2" name="r1">
-                                            <label for="radioPrimary2">
-                                                NO
-                                            </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
-                                        <div class="form-group clearfix">
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
-                                            <label for="radioPrimary1">
-                                                SI
-                                            </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary2" name="r1">
-                                            <label for="radioPrimary2">
-                                                NO
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <p>Observación</p>
-                                            <textarea name="" id="" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p>Verificar que el anexo técnico 2 de la resolución 3047 de 2008 haya sido enviado a los correos y portales correspondientes a cada ERP, acorde a lo establecido por la norma.</p>
-                                        <div class="form-group clearfix">
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary1" name="r1" checked="">
-                                            <label for="radioPrimary1">
-                                                SI
-                                            </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                            <input type="radio" id="radioPrimary2" name="r1">
-                                            <label for="radioPrimary2">
-                                                NO
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <p>Observación</p>
-                                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <button class="btn btn-info float-right" (click)="terminarAuditoria()" >Terminar auditoría</button>
+                        <button class="btn btn-info float-right" *ngIf="terminado == 'f'" (click)="terminarAuditoria()" >Terminar auditoría</button>
+                        <button class="btn btn-info float-right" *ngIf="terminado == 't'" disabled >Terminar auditoría</button>
                     </div>
                 </form>
             </div>
@@ -280,3 +186,143 @@
         
     </div>
 </section>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <p class="modal-title pull-left"> Explique detalladamente porqué quieres eliminar la auditoría.</p>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label for="">Explicación</label>
+    <p>(Su explicación debe contener mínimo 100 caracteres)</p>
+    <div class="form-group">
+        <textarea [(ngModel)]="explicacion" [value]="explicacion" class="form-control"></textarea>
+    </div>
+    <div class="form-button">
+        <button (click)="anular()" class="btn btn-danger float-right">Anular auditoría</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+    <div class="modal-header">
+      <p class="modal-title pull-left">Finalización de auditoría.</p>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="card-body" style="font-size: 11px; text-align: justify;">
+            <div [innerHTML]="dataHallazgo"></div>
+        </div>
+
+        <label for="">Explicación</label>  
+        <div class="form-group">
+            <textarea [(ngModel)]="explicacion" [value]="explicacion" class="form-control"></textarea>
+        </div>
+        <div class="form-button">
+            <button (click)="finalizar()" class="btn btn-danger float-right">Finalizar auditoría</button>
+        </div>
+    </div>
+  </ng-template>
+
+  <div bsModal #childModal="bs-modal" class="modal fade" [config]="{backdrop: 'static'}" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="card-body" style="font-size: 11px; text-align: justify;">
+            <ng-container *ngFor="let item of dataSubForm; index as i; first as isFirst">
+                <div class="{{item.class}}" >
+                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                        <div class="{{item.class}}">
+                            <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                <div class="{{item.class}}">
+                                    <p *ngIf="item.class == 'card-title'" class="{{item.class}}">{{item.value}}</p>
+                                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                        <div class="{{item.class}}">
+                                            <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                <p *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                <div class="{{item.class}}">
+                                                    <span [attr.id]="item.id"></span>
+                                                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                        <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
+                                                            <div *ngIf="terminado == 'f'" class="icheck-primary d-inline" >
+                                                                <input *ngIf="item.etiqueta == 'input'" (click)="guardarSubRespuesta('1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="subradioPrimary{{item.id}}" type="{{item.type}}" name="subRadio{{item.dependencia}}">
+                                                                <label *ngIf="item.etiqueta == 'input'" for="subradioPrimary{{item.id}}">
+                                                                    {{item.value}}
+                                                                </label>
+                                                            </div>
+                                                            <div *ngIf="terminado == 't'" class="icheck-primary d-inline" >
+                                                                <input *ngIf="item.etiqueta == 'input'" disabled [checked]="item.value == item.respuesta" id="subradioPrimary{{item.id}}" type="{{item.type}}" name="subRadio{{item.dependencia}}">
+                                                                <label *ngIf="item.etiqueta == 'input'" for="subradioPrimary{{item.id}}">
+                                                                    {{item.value}}
+                                                                </label>
+                                                            </div>
+                                                        </ng-container>
+                                                        <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
+                                                            <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
+                                                            <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarSubRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
+                                                            <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="date">
+                                                        </div>
+                                                        <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                        <ng-container *ngIf="terminado == 'f'">
+                                                            <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarSubRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="terminado == 't'">
+                                                            <textarea *ngIf="item.etiqueta == 'textarea'" disabled class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+        <div class="card-footer">
+            <button (click)="EnviarSubRespuesta('1', id_dependencia, ValueResp, ValueDependencia)" class="btn btn-info float-right">Guardar</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #HallazgoModal="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+         <div class="modal-title">Generar devoluciones</div>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideHallazgoModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="card-body" style="font-size: 11px; text-align: justify;">
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Responsable</label>
+                    <select class="form-control" [(ngModel)]="selectedValue" style="width: 100%;">
+                        <option *ngFor="let item of dataUsuarios['resultado']; index as i; first as isFirst" [value]="item.cod_usua" >{{item.cod_usua}} {{item.nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+            </div>    
+        </div>
+        <div class="card-footer">
+            <button (click)="imprimir('2')" class="btn btn-info float-right">Imprimir hallazgos</button>
+        </div>
+    </div>
+  </div>
+</div>

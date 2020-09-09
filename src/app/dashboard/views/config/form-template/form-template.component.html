@@ -44,7 +44,7 @@
                             <div class="collapse navbar-collapse" id="navbarNav">
                                 <ul class="navbar-nav mr-auto">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="nav-icon fas fa-cog"></i> Configuración </a>
+                                        <a class="nav-link" href="#">Configurar formularios </a>
                                     </li>
                                 </ul>
                                 <ul class="navbar-nav">
@@ -81,7 +81,7 @@
                                                                 <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
                                                                     <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
                                                                         <div class="icheck-primary d-inline">
-                                                                            <input *ngIf="item.etiqueta == 'input'" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                            <input *ngIf="item.etiqueta == 'input'" (click)="openModal(template, item.id)" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
                                                                             <label *ngIf="item.etiqueta == 'input'" style="margin-left: 5px;" for="radioPrimary{{item.id}}">
                                                                                 <a style="cursor: pointer;" (click)="editarValor(item.id,item.value)">{{item.value}}</a>
                                                                             </label>
@@ -142,7 +142,15 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link">
-                                   <a style="cursor: pointer;" (click)="crearPreguntas('2')">Pregunta completa</a>
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('2')">Pregunta compl. 2</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('6')">Pregunta compl. 3</a>
                                   <span style="cursor: pointer;" class="badge bg-warning float-right">
                                       <i class="fas fa-question-circle"></i>
                                   </span>
@@ -150,7 +158,15 @@
                             </li>
                             <li class="nav-item">
                                 <a style="cursor: pointer;" class="nav-link">
-                                   <a style="cursor: pointer;" (click)="crearPreguntas('3')">Pregunta básica</a>
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('3')">Pregunta básica 2</a>
+                                  <span class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a style="cursor: pointer;" class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('7')">Pregunta básica 3</a>
                                   <span class="badge bg-warning float-right">
                                       <i class="fas fa-question-circle"></i>
                                   </span>
@@ -158,7 +174,15 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link">
-                                   <a style="cursor: pointer;" (click)="crearPreguntas('4')">Pregunta simple</a>
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('4')">Pregunta simple 2</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearPreguntas('8')">Pregunta simple 3</a>
                                   <span style="cursor: pointer;" class="badge bg-warning float-right">
                                       <i class="fas fa-question-circle"></i>
                                   </span>
@@ -183,3 +207,153 @@
         
     </div>
 </section>
+<ng-template #template>
+    <div class="modal-header">
+      <p class="modal-title pull-left">Formulario de sub-preguntas.</p>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-9">
+                <ng-container *ngFor="let item of dataSubForm; index as i; first as isFirst">
+                    <div class="{{item.class}}" >
+                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                            <div class="{{item.class}}">
+                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                    <div class="{{item.class}}">
+                                        <p *ngIf="item.class == 'card-title'" class="{{item.class}}"><a style="cursor: pointer;" (click)="editarSubValor(item.id,item.value)">{{item.value}}</a></p>
+                                        <div *ngIf="item.class == 'row'" >
+                                            <div class="float-right" for="">
+                                                <label for="">Sección donde desea crear la pregunta.</label>
+                                                <input type="radio" name="card" style="margin-left: 6px;" [(ngModel)]="idRadioDependencia" value="{{item.id}}" id="">
+                                            </div>
+                                        </div>
+                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                            <div class="{{item.class}}" style="border: 1px solid #369; border-radius: 1em/1em;">
+                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                    <p *ngIf="item.etiqueta == 'p'" ><a style="cursor: pointer;" (click)="editarSubValor(item.id,item.value)">{{item.value}}</a></p>
+                                                    <div class="{{item.class}}">
+                                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                            <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                <div class="icheck-primary d-inline">
+                                                                    <input *ngIf="item.etiqueta == 'input'" id="subradioPrimary{{item.id}}" type="{{item.type}}" name="subRadio{{item.dependencia}}">
+                                                                    <label *ngIf="item.etiqueta == 'input'" style="margin-left: 5px;" for="subradioPrimary{{item.id}}">
+                                                                        <a style="cursor: pointer;" (click)="editarSubValor(item.id,item.value)">{{item.value}}</a>
+                                                                    </label>
+                                                                </div>
+                                                            </ng-container>
+                                                                <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
+                                                                    <p style="margin-top: 5px; margin-left: 5px;" ><a style="cursor: pointer;" (click)="editarSubValor(item.id,item.value)">{{item.value}}</a></p>
+                                                                    <input class="form-control" type="date">
+                                                                </div>
+                                                            <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" ><a style="cursor: pointer;" (click)="editarSubValor(item.id,item.value)">{{item.value}}</a></p>
+                                                            <textarea *ngIf="item.etiqueta == 'textarea'" class="{{item.class}}"></textarea>
+                                                        </ng-container>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="col-sm-3" >
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"> Crear controles</h5>
+                    </div>
+                    <div class="card-body" >
+                        <div *ngIf="idSubEdit.length > 0" class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Editar</label>
+                                    <textarea type="text" id="elementSubId" class="form-control" [(ngModel)]="valueSubEdit" [value]="valueSubEdit"></textarea>
+                                </div>   
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group">
+                                    <button type="button" (click)="updateSubControl(idSubEdit, valueSubEdit)" class="btn btn-success btn-sm">Guardar <i class="fas fa-save"></i></button>
+                                    <button type="button" (click)="editarSubValor('','')" class="btn btn-danger btn-sm">Cerrar</button>
+                                  </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                              <a class="nav-link">
+                                 <a style="cursor: pointer;" (click)="crearSubSeccion('1')">Crear sección</a>
+                                <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                    <i class="fas fa-question-circle"></i>
+                                </span>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('2')">Pregunta compl 2</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('6')">Pregunta compl 3</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a style="cursor: pointer;" class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('3')">Pregunta básica 2</a>
+                                  <span class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('7')">Pregunta básica 3</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('4')">Pregunta simple 2</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('8')">Pregunta simple 3</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                   <a style="cursor: pointer;" (click)="crearSubPreguntas('5')">Pregunta y fechas</a>
+                                  <span style="cursor: pointer;" class="badge bg-warning float-right">
+                                      <i class="fas fa-question-circle"></i>
+                                  </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer" >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </ng-template>

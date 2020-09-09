@@ -1,9 +1,11 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, TemplateRef } from '@angular/core';
 import { FormService } from '../../../../services/form.service';
 import { StoreService } from "../../../../services/store.service";
 import { Router } from '@angular/router';
-declare var $:any
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+declare var $:any
+declare var sweetAlert:any
 @Component({
   selector: 'app-form-template',
   templateUrl: './form-template.component.html',
@@ -12,6 +14,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class FormTemplateComponent implements OnInit {
   registerForm: FormGroup;
+  modalRef: BsModalRef;
+
   submitted = false;
   dataForm:any[] = []
   idperfilSelect:string = ''
@@ -26,12 +30,20 @@ export class FormTemplateComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
   }]
+  //variables sub preguntas
+
+  id_componente:number = 0
+  dataSubForm:any[] = []
+  idSubEdit:string  = ''
+  valueSubEdit:string  = ''
+  
   constructor(
     private _FormService: FormService,
     private _router: Router, 
     public _storeServises: StoreService,
     private formBuilder: FormBuilder,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -199,6 +211,159 @@ export class FormTemplateComponent implements OnInit {
     } 
   }
 
+  //---------------SUB PREGUNTAS ------------------------------------------
 
+  openModal(template: TemplateRef<any>, id:number) {
+    this.modalRef = this.modalService.show(template,
+      Object.assign({}, { class: 'gray modal-lg'}));
+    this.id_componente = id
+    this.subFormulario(this.idperfilSelect)
+  }
+  
+  subFormulario(id:string){
+    this.idRadioDependencia = ''
+    this.idperfilSelect = id
+    let params = {
+      codigo: "5",
+      parametro : id,
+      parametro2 : this.id_componente
+    }
+    this._storeServises.loading = true
+    this._FormService.formulario(params).subscribe(
+      resp => [
+        this.dataSubForm = resp,
+        console.log(resp)
+      ], 
+      err => [
+        //this._storeServises.loading = false,
+        this._storeServises.Notifications(err.error["message"],err.error["success"]),
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false,
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+  }
+
+  crearSubSeccion(id:string){
+
+    if (this.idperfilSelect.length > 0) {
+      let ultimo_ranking = 0
+      if (this.dataSubForm.length > 0) {
+        for (let i = 0; i < this.dataSubForm.length; i++) {
+          ultimo_ranking = parseInt(this.dataSubForm[i]["ultimo_ranking"])+1 
+        }
+      }else{
+        ultimo_ranking = 1
+      }      
+                     
+      let params = {
+        codigo: id,
+        etiqueta1 : '0',
+        clase1 : '0',
+        dependencia1 : '0',
+        value11 : '0',
+        type11 : '0',
+        ranking1 : ultimo_ranking,
+        perfil1 : this.idperfilSelect,
+        id_componente1 : this.id_componente
+      }
+      this._storeServises.loading = true
+      this._FormService.crearSubControles(params).subscribe(
+        resp => [
+          this.subFormulario(this.idperfilSelect),
+          console.log(resp)
+        ], 
+        err => [
+          //this._storeServises.loading = false,
+          this._storeServises.Notifications(err.error["message"],err.error["success"]),
+          console.log(err.error)
+        ], 
+        () => [
+          this._storeServises.loading = false,
+          //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+          //this._storeServises.loading = false
+        ]
+      ) 
+    } 
+  }
+
+  crearSubPreguntas(id:string){
+    if (this.idRadioDependencia.length < 1) {
+      this._storeServises.Notifications('Seleccione la sección donde desea crear la pregunta.', false)
+      return false
+    }
+
+    if (this.idperfilSelect.length > 0) {
+                     
+      let params = {
+        codigo: id,
+        etiqueta1 : '0',
+        clase1 : '0',
+        dependencia1 : this.idRadioDependencia,
+        value11 : '0',
+        type11 : '0',
+        ranking1 :'0',
+        perfil1 : this.idperfilSelect,
+        id_componente1 : this.id_componente
+      }
+      this._storeServises.loading = true
+      this._FormService.crearSubControles(params).subscribe(
+        resp => [
+          this.subFormulario(this.idperfilSelect),
+          console.log(resp)
+        ], 
+        err => [
+          //this._storeServises.loading = false,
+          this._storeServises.Notifications(err.error["message"],err.error["success"]),
+          console.log(err.error)
+        ], 
+        () => [
+          this._storeServises.loading = false,
+          //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+          //this._storeServises.loading = false
+        ]
+      ) 
+    }else{
+      this._storeServises.Notifications('No ha seleccionado el perfil', false)
+    } 
+  }
+
+  updateSubControl(id:string, value:string){
+    if (id.length > 0) {
+      let params = {
+        codigo: "6",
+        parametro : id,
+        parametro2 : value.trim()
+      }
+      this._storeServises.loading = true
+      this._FormService.formulario(params).subscribe(
+        resp => [
+          this.subFormulario(this.idperfilSelect),
+          console.log(resp)
+        ], 
+        err => [
+          //this._storeServises.loading = false,
+          this._storeServises.Notifications(err.error["message"],err.error["success"]),
+          console.log(err.error)
+        ], 
+        () => [
+          this._storeServises.loading = false,
+          //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+          //this._storeServises.loading = false
+        ]
+      )
+    }
+     
+  }
+
+  editarSubValor(id:string, value:string ){
+    const element = $("#elementSubId")
+    element.focus();
+    this.idSubEdit = id
+    this.valueSubEdit = value
+  }
 
 }

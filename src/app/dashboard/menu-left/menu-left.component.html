@@ -1,67 +1,52 @@
 <nav class="mt-2">
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-      <li class="nav-header">Menú</li>
-      <li class="nav-item">
-        <a routerLink="censo" class="nav-link">
-          <i class="nav-icon fas fa-list"></i>
-          <p>
-            Censo
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="auditado" class="nav-link">
-          <i class="nav-icon fas fa-table"></i>
-          <p>
-            Pacientes auditados
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="" class="nav-link">
-          <i class="nav-icon fas fa-search"></i>
-          <p>
-            Pacientes por auditar
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="config/formtemplate" class="nav-link">
-          <i class="nav-icon fas fa-cog"></i>
-          <p>
-            Configuración
-          </p>
-        </a>
-      </li>
-      <!-- <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon far fa-envelope"></i>
-          <p>
-            Mailbox
-            <i class="fas fa-angle-left right"></i>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
-          <li class="nav-item">
-            <a href="pages/mailbox/mailbox.html" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Inbox</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/mailbox/compose.html" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Compose</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/mailbox/read-mail.html" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Read</p>
-            </a>
-          </li>
-        </ul>
-      </li> -->
+  <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    <li class="nav-header">Menú</li>
+    <li class="nav-item">
+      <a routerLink="censo" class="nav-link">
+        <i class="nav-icon fas fa-list"></i>
+        <p>
+          Censo
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="auditado" class="nav-link">
+        <i class="nav-icon fas fa-table"></i>
+        <p>
+          Pacientes auditados
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a style="cursor: pointer;" (click)="openModal(template)" class="nav-link">
+        <i class="nav-icon fas fa-search"></i>
+        <p>
+          Pacientes por auditar
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="config/formtemplate" class="nav-link">
+        <i class="nav-icon fas fa-cog"></i>
+        <p>
+          Configuración
+        </p>
+      </a>
+    </li>
+  </ul>
+</nav>
 
-    </ul>
-  </nav>
+<ng-template #template>
+  <div class="modal-header modal-sm">
+    <p style="font-size: 14px;" class="modal-title pull-left">Buscar por admisión</p>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <input class="form-control" [(ngModel)]="buscarAdmision" [value]="buscarAdmision" type="text">
+    </div>
+    <button (click)="auditar_paciente()" class="btn btn-info btn-block">Buscar</button>
+  </div>
+</ng-template>

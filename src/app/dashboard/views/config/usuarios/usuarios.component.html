@@ -1,0 +1,138 @@
+<div class="row">
+    <div class="col-sm-9">
+        <div class="card-header">
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text"  (keyup.enter)="buscarEnTabla()" [(ngModel)]="textBuscar" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                    <button type="button" (click)="buscarEnTabla()" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 table-responsive">  
+                    <table style="font-size: 12px;" class="table table-bordered table-striped table-sm" id="accordion">
+                      <thead>
+                          <tr>
+                              <td style="width: 10px"></td>
+                              <td style="width: 10px">Id</td>
+                              <td>Nombre</td>
+                              <td>Fecha</td>
+                              <td style="width: 10px"></td>
+                            </tr>
+                      </thead>
+                      <tbody style="font-size: 10px;" >
+                        <ng-container #table *ngFor="let item of dataUsuarios['data']; index as i; first as isFirst" > 
+                          <tr class="card-header" id="headingOne">
+                            <td>
+                                <a style="color:slateblue; cursor: pointer;" (click)="editUsers(item.cod_usua, item.nombre)">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td style="cursor: pointer;">{{item.cod_usua}}</td>
+                            <td style="cursor: pointer;">{{item.nombre}}</td>
+                            <td style="cursor: pointer;">{{item.fechacrea}}</td>
+                            <td>
+                              <a (click)="detailUsuario(item.cod_usua)" href="#List-{{ i }}" data-toggle="collapse">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </td>
+                        </tr>
+                    
+                        <tr id="List-{{ i }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <td colspan="12">
+                                <div class="card-body">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-6" *ngFor="let item of dataDetailUsuario; index as i; first as isFirst">
+                                                    <!-- checkbox -->
+                                                    <div class="form-group">
+                                                      <div class="custom-control custom-checkbox">
+                                                        <input *ngIf="item.permiso == null" (click)="CheckPerfil(1, item.id)" class="custom-control-input" type="checkbox" id="{{item.id}}">
+                                                        <input *ngIf="item.permiso != null" checked (click)="CheckPerfil(2, item.id)"  class="custom-control-input" type="checkbox" id="{{item.id}}">
+                                                        <label for="{{item.id}}" class="custom-control-label">{{item.descripcion}}</label>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <ng-container  >
+                                                
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+              </div>
+            </div>
+            <!-- /.row -->
+            <div class="row float-right">
+              <div class="col-xs-12 col-12">
+                <pagination [totalItems]="totalRows" [(ngModel)]="currentPage" [maxSize]="5" (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div *ngIf="EditUsuario == 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Crear usuario</h3>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="firstName" [value]="firstName" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstName.errors.required">Nombre compreto es requerido</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password"  maxlength="100" [(ngModel)]="password" [value]="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">La contraseña es requerida</div>
+                            <div *ngIf="f.password.errors.minlength">La contraseña debería tener mínimo 4 caracteres</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success btn-block">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div *ngIf="EditUsuario != 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Crear usuario</h3>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="registerFormEdit" (ngSubmit)="onSubmitEdit()">
+                    <div class="form-group">
+                        <input type="text" class="form-control" disabled [value]="EditUsuario" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="firstName" [value]="firstName" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && d.firstName.errors }" />
+                        <div *ngIf="submitted && d.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="d.firstName.errors.required">Nombre compreto es requerido</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success btn-block">Registrar</button>
+                        <button (click)="NuevoUsers()" class="btn btn-primary btn-block">Nuevo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -21,4 +21,8 @@ export class CensoService {
   auditados(page:number, admision:string, perfil:string){
     return this._http.get<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/table_auditado.php?page='+page+'&admision='+admision+'&perfil='+perfil)
   }
+
+  terminarAuditoria(params:any){
+    return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_detalle_admision.php', params)
+  }
 }

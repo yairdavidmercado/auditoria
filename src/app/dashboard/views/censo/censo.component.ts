@@ -93,20 +93,6 @@ export class CensoComponent implements OnInit {
 
   iniciarAuditoria(cod_admi:string, cod_audi:string){
     this._router.navigateByUrl('/dashboard/form?cod_admi='+cod_admi+'&cod_audi='+cod_audi)
-    // sweetAlert({
-    //   title: "Advertencia!",
-    //   text: "¿Estas seguro que deseas  al usuario ?",
-    //   icon: "warning",
-    //   buttons: true,
-    //   dangerMode: true,
-    // })
-    // .then((willDelete) => {
-    //   if (willDelete) {
-        
-    //   } else {
-    //     // sweetAlert("Your imaginary file is safe!");
-    //   }
-    // });
   }
 
 }

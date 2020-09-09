@@ -5,11 +5,13 @@ import { FormsModule,ReactiveFormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule, Routes } from '@angular/router';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 //ng loading
 import { NgxLoadingModule } from 'ngx-loading';
 //ng-pagination
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './access/login/login.component';
@@ -20,6 +22,8 @@ import { AuditadoComponent } from './dashboard/views/auditado/auditado.component
 import { FormComponent } from './dashboard/views/form/form.component';
 import { ConfigComponent } from './dashboard/views/config/config.component';
 import { FormTemplateComponent } from './dashboard/views/config/form-template/form-template.component';
+import { UsuariosComponent } from './dashboard/views/config/usuarios/usuarios.component';
+import { PerfilesComponent } from './dashboard/views/config/perfiles/perfiles.component';
 
 const rutas: Routes = [
   {
@@ -65,6 +69,14 @@ const rutas: Routes = [
             path: 'formtemplate',
             component: FormTemplateComponent
           },
+          {
+            path: 'usuario',
+            component: UsuariosComponent
+          },
+          {
+            path: 'perfiles',
+            component: PerfilesComponent
+          },
         ]
       }
     ]
@@ -81,7 +93,9 @@ const rutas: Routes = [
     AuditadoComponent,
     FormComponent,
     ConfigComponent,
-    FormTemplateComponent
+    FormTemplateComponent,
+    UsuariosComponent,
+    PerfilesComponent
   ],
   imports: [
     BrowserModule,
@@ -96,8 +110,9 @@ const rutas: Routes = [
     ReactiveFormsModule,
     NgxLoadingModule.forRoot({}),
     PaginationModule.forRoot(),
+    ModalModule.forRoot(),
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

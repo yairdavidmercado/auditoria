@@ -8,7 +8,7 @@ declare var sweetAlert:any
 export class StoreService {
   loading: boolean = false
   dataSession: any[] = JSON.parse(localStorage.getItem('dataSession'))
-  baseUrl: string = 'http://localhost'
+  baseUrl: string = 'http://192.168.1.4'
   constructor() { }
 
   Notifications(texto: string, tipo: boolean){
@@ -69,6 +69,6 @@ export class StoreService {
     localStorage.setItem("session", 'false')
     //localStorage.removeItem('dataSession');
     localStorage.setItem("dataSession", null)
-    window.location.href = 'login'
+    window.location.href = ''
   }
 }
