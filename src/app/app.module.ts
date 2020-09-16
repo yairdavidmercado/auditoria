@@ -24,6 +24,10 @@ import { ConfigComponent } from './dashboard/views/config/config.component';
 import { FormTemplateComponent } from './dashboard/views/config/form-template/form-template.component';
 import { UsuariosComponent } from './dashboard/views/config/usuarios/usuarios.component';
 import { PerfilesComponent } from './dashboard/views/config/perfiles/perfiles.component';
+import { DevolucionComponent } from './dashboard/views/devolucion/devolucion.component';
+import { RecibidasComponent } from './dashboard/views/devolucion/recibidas/recibidas.component';
+import { AsignadasComponent } from './dashboard/views/devolucion/asignadas/asignadas.component';
+import { RevisionComponent } from './dashboard/views/devolucion/revision/revision.component';
 
 const rutas: Routes = [
   {
@@ -55,6 +59,29 @@ const rutas: Routes = [
       {
         path: 'form',
         component: FormComponent
+      },
+      {
+        path: 'objeciones',
+        component: DevolucionComponent,
+        children: [
+          {
+            path: '',
+            pathMatch: 'prefix',
+            redirectTo: 'recibidas'
+          },
+          {
+            path: 'recibidas',
+            component: RecibidasComponent
+          },
+          {
+            path: 'enviadas',
+            component: AsignadasComponent
+          },
+          {
+            path: 'revision',
+            component: RevisionComponent
+          },
+        ]
       },
       {
         path: 'config',
@@ -95,7 +122,11 @@ const rutas: Routes = [
     ConfigComponent,
     FormTemplateComponent,
     UsuariosComponent,
-    PerfilesComponent
+    PerfilesComponent,
+    DevolucionComponent,
+    RecibidasComponent,
+    AsignadasComponent,
+    RevisionComponent
   ],
   imports: [
     BrowserModule,

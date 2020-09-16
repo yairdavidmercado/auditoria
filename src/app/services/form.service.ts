@@ -15,10 +15,6 @@ export class FormService {
     return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_formulario.php', params )
   }
 
-  hallazgo(params: any){
-    return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_hallazgo.php', params )
-  }
-
   crearControles(params: any){
     return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_crear_controles.php', params )
   }
@@ -41,5 +37,9 @@ export class FormService {
 
   guardarDevoluciones(params: any){
     return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/guardar_devoluciones.php', params )
+  }
+
+  guardarjustificacion(params: any){
+    return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/guardar_justificaciones.php', params )
   }
 }

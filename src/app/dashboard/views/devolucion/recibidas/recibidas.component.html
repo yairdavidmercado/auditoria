@@ -1,0 +1,50 @@
+<div class="card-header">
+    <h4 class="card-title"><i class="nav-icon fas fa-sync-alt"></i> Devoluciones</h4>
+    <div class="card-tools">
+      <div class="input-group input-group-sm" style="width: 150px;">
+        <input type="text"  (keyup.enter)="buscarEnTabla()" [(ngModel)]="textBuscar" name="table_search" class="form-control float-right" placeholder="Search">
+
+        <div class="input-group-append">
+          <button type="button" (click)="buscarEnTabla()" class="btn btn-default">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="card-body">
+    <div class="row">
+      <div class="col-md-12 table-responsive">  
+            <table style="font-size: 14px;" class="table table-bordered table-striped table-sm" id="accordion">
+              <thead>
+                  <tr>
+                      <td style="width: 10px"></td>
+                      <td style="width: 10px">Auditoría</td>
+                      <td>Perfil de auditoría</td>
+                      <td>Realizado por</td>
+                    </tr>
+              </thead>
+              <tbody style="font-size: 10px;" >
+                <ng-container #table *ngFor="let item of dataCenso['data']; index as i; first as isFirst" > 
+                  <tr class="card-header" id="headingOne">
+                    <td>
+                        <a style="color:slateblue; cursor: pointer;" (click)="revisar(item.cod_audi)">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                    <td style="cursor: pointer;">{{item.cod_audi}}</td>
+                    <td style="cursor: pointer;">{{item.descripcion}}</td>
+                    <td style="cursor: pointer;">{{item.autor}}</td>
+                </tr>
+                </ng-container>
+              </tbody>
+            </table>
+      </div>
+    </div>
+    <!-- /.row -->
+    <div class="row float-right">
+      <div class="col-xs-12 col-12">
+        <pagination [totalItems]="totalRows" [(ngModel)]="currentPage" [maxSize]="5" (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+    </div>
+  </div>

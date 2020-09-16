@@ -22,6 +22,14 @@ export class CensoService {
     return this._http.get<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/table_auditado.php?page='+page+'&admision='+admision+'&perfil='+perfil)
   }
 
+  devoluciones(page:number, cod_audi:string, cod_usua:string){
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/table_devoluciones.php?page='+page+'&cod_audi='+cod_audi+'&cod_usua='+cod_usua)
+  }
+
+  devolucionesRealizadas(page:number, cod_audi:string, cod_usua:string){
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/table_devoluciones_realizadas.php?page='+page+'&cod_audi='+cod_audi+'&cod_usua='+cod_usua)
+  }
+
   terminarAuditoria(params:any){
     return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_detalle_admision.php', params)
   }

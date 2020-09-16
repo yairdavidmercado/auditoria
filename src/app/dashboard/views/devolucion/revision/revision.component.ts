@@ -1,19 +1,20 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormService } from '../../../services/form.service';
-import { StoreService } from "../../../services/store.service";
-import { UsuarioService } from "../../../services/usuario.service";
-import { CensoService } from "../../../services/censo.service";
+import { FormService } from '../../../../services/form.service';
+import { StoreService } from "../../../../services/store.service";
+import { UsuarioService } from "../../../../services/usuario.service";
+import { CensoService } from "../../../../services/censo.service";
 import { ActivatedRoute ,Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 declare var $:any
 declare var sweetAlert:any
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  selector: 'app-revision',
+  templateUrl: './revision.component.html',
+  styleUrls: ['./revision.component.css']
 })
-export class FormComponent implements OnInit {
+export class RevisionComponent implements OnInit {
+  
   @ViewChild('childModal', { static: false }) childModal: ModalDirective;
   @ViewChild('HallazgoModal', { static: false }) HallazgoModal: ModalDirective;
 
@@ -49,7 +50,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(()=>{
-      this.validarNueva(),
+      //this.validarNueva(),
       this.mostrarUsuarios()
     });
 
