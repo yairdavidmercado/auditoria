@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 declare var $:any
-declare var sweetAlert:any
+declare var Swal:any
 @Component({
   selector: 'app-form-template',
   templateUrl: './form-template.component.html',
@@ -20,6 +20,7 @@ export class FormTemplateComponent implements OnInit {
   dataForm:any[] = []
   idperfilSelect:string = ''
   idRadioDependencia:string  = ''
+  url_template_img:string = ''
 
   idEdit:string  = ''
   valueEdit:string  = ''
@@ -364,6 +365,14 @@ export class FormTemplateComponent implements OnInit {
     element.focus();
     this.idSubEdit = id
     this.valueSubEdit = value
+  }
+
+  mostrar_imagen_plantilla(url:string){  
+    Swal.fire({
+      imageUrl: 'https://placeholder.pics/svg/300x1500',
+      imageHeight: 1500,
+      imageAlt: 'A tall image'
+    })
   }
 
 }

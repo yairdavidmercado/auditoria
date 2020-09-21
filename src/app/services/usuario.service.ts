@@ -18,7 +18,7 @@ export class UsuarioService {
 
   //informacion paciente
   info_paciente(params: any){
-    return this._http.get<any[]>(this._storeServises.baseUrl+'/auditoria_concurrente/php/sel_info_paciente.php?codigo='+params.codigo+'&parametro='+params.parametro )
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/sel_info_paciente.php?codigo='+params.codigo+'&parametro='+params.parametro )
   }
 
   //informacion paciente

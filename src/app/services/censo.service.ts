@@ -11,7 +11,7 @@ export class CensoService {
     public _storeServises: StoreService
   ) { }
   censo(page:number, admision:string){
-    return this._http.get<any[]>(this._storeServises.baseUrl+'/auditoria_concurrente/php/table_censo.php?page='+page+'&admision='+admision)
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_censo.php?page='+page+'&admision='+admision)
   }
 
   detailAdmision(params:any){
