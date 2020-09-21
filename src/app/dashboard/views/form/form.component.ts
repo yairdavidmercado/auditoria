@@ -437,7 +437,7 @@ export class FormComponent implements OnInit {
     this._storeServises.loading = true
     this._usuarioServises.info_paciente(params).subscribe(
       resp => [
-        this.dataPaciente = resp["resultado"][0],
+        this.dataPaciente = resp["data"][0],
         console.log(resp)
       ], 
       err => [
@@ -461,7 +461,7 @@ export class FormComponent implements OnInit {
     this._storeServises.loading = true
     this._usuarioServises.info_paciente(params).subscribe(
       resp => [
-        this.dataPaciente = resp["resultado"][0],
+        this.dataPaciente = resp["data"][0],
         this.crearAuditoria(),
         console.log(resp)
       ], 
