@@ -87,7 +87,7 @@
                                                 {{item.fecha_solicitud}}
                                               </td>
                                               <td>
-                                                <a href="http://localhost/AppToolsAPI/reports/admin.php?codigo=1&cod_admi={{item.cod_admi}}&perfil={{perfil}}&cod_audi={{item.cod_audi}}" target="_blank" >Imprimir</a>
+                                                <a style="cursor:pointer; color:blue" (click)="imprimirAuditoria(item.cod_admi, perfil, item.cod_audi)">Imprimir</a>
                                               </td>
                                             </tr>
                                           </ng-container>

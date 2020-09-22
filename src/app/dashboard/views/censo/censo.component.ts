@@ -95,4 +95,8 @@ export class CensoComponent implements OnInit {
     this._router.navigateByUrl('/dashboard/form?cod_admi='+cod_admi+'&cod_audi='+cod_audi)
   }
 
+  imprimirAuditoria(cod_admi:string, perfil:string, cod_audi:string){
+    window.open(this._storeServises.baseUrl+'/AppToolsAPI/reports/admin.php?codigo=1&cod_admi='+cod_admi+'&perfil='+perfil+'&cod_audi='+cod_audi)
+  }
+
 }
