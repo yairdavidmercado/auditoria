@@ -1,0 +1,119 @@
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid" style="padding-top: 2%;">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title"><i class="nav-icon fas fa-search"></i> Pacientes por auditar</h4>
+              <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text"  (keyup.enter)="buscarEnTabla()" [(ngModel)]="textBuscar" name="table_search" class="form-control float-right" placeholder="Search">
+
+                  <div class="input-group-append">
+                    <button type="button" (click)="buscarEnTabla()" class="btn btn-default">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12 table-responsive">  
+                      <table style="font-size: 12px;" class="table table-bordered table-striped table-sm" id="accordion">
+                        <thead>
+                            <tr>
+                                <td style="width: 10px"></td>
+                                <td style="width: 10px">Admisión</td>
+                                <td>Paciente</td>
+                                <td>Cama</td>
+                                <td>Habitación</td>
+                                <td>Servicio</td>
+                                <td>Piso</td>
+                                <td>Aseguradora</td>
+                                <td>Fecha admisión</td>
+                                <td>Auditado</td>
+                                <td style="width: 10px"></td>
+                              </tr>
+                        </thead>
+                        <tbody style="font-size: 10px;" >
+                          <ng-container #table *ngFor="let item of dataCenso['data']; index as i; first as isFirst" > 
+                            <tr class="card-header" id="headingOne">
+                              <td>
+                                  <a style="color:slateblue; cursor: pointer;" (click)="iniciarAuditoria(item.admision, 0)">
+                                      <i class="fas fa-eye"></i>
+                                  </a>
+                              </td>
+                              <td style="cursor: pointer;">{{item.admision}}</td>
+                              <td style="cursor: pointer;">{{item.paciente}}</td>
+                              <td style="cursor: pointer;">{{item.cama}}</td>
+                              <td style="cursor: pointer;">{{item.habitacion}}</td>
+                              <td style="cursor: pointer;">{{item.tipo_habitacion}}</td>
+                              <td style="cursor: pointer;">{{item.piso}}</td>
+                              <td style="cursor: pointer;">{{item.aseguradora}}</td>
+                              <td style="cursor: pointer;">{{item.fecha_ingreso}}</td>
+                              <td style="cursor: pointer;">{{item.fecha_ingreso}}</td>
+                              <td>
+                                <a (click)="detailCenso(item.admision)" href="#List-{{ i }}" data-toggle="collapse">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                            </td>
+                          </tr>
+                      
+                          <tr id="List-{{ i }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                              <td colspan="12">
+                                  <div class="card-body">
+                                      <table class="table table-bordered">
+                                        <tbody>
+                                          <ng-container *ngFor="let item of detailAdmision; index as i; first as isFirst">
+                                            <tr>
+                                              <td>
+                                                <a style="cursor: pointer;" (click)="iniciarAuditoria(item.cod_admi, item.cod_audi)">
+                                                  <i class="fas fa-eye"></i>
+                                                </a>
+                                              </td>
+                                              <td>
+                                                {{item.cod_audi}}
+                                              </td>
+                                              <td>
+                                                {{item.usuario_creador}}
+                                              </td>
+                                              <td>
+                                                {{item.servicio}}
+                                              </td>
+                                              <td>
+                                                {{item.fecha_solicitud}}
+                                              </td>
+                                              <td>
+                                                <a style="cursor:pointer; color:blue" (click)="imprimirAuditoria(item.cod_admi, perfil, item.cod_audi)">Imprimir</a>
+                                              </td>
+                                            </tr>
+                                          </ng-container>
+                                        </tbody>  
+                                      </table>
+                                  </div>
+                              </td>
+                          </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                </div>
+              </div>
+              <!-- /.row -->
+              <div class="row float-right">
+                <div class="col-xs-12 col-12">
+                  <pagination [totalItems]="totalRows" [(ngModel)]="currentPage" [maxSize]="5" (pageChanged)="pageChanged($event)"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div><!--/. container-fluid -->
+</section>
+  <!-- /.content -->

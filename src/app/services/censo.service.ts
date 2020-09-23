@@ -14,6 +14,10 @@ export class CensoService {
     return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_censo.php?page='+page+'&admision='+admision)
   }
 
+  pendientes(page:number, admision:string){
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_pendientes.php?page='+page+'&admision='+admision)
+  }
+
   detailAdmision(params:any){
     return this._http.post<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/sel_detalle_admision.php', params)
   }

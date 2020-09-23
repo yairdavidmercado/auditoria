@@ -28,6 +28,7 @@ import { DevolucionComponent } from './dashboard/views/devolucion/devolucion.com
 import { RecibidasComponent } from './dashboard/views/devolucion/recibidas/recibidas.component';
 import { AsignadasComponent } from './dashboard/views/devolucion/asignadas/asignadas.component';
 import { RevisionComponent } from './dashboard/views/devolucion/revision/revision.component';
+import { ListaPendienteComponent } from './dashboard/views/lista-pendiente/lista-pendiente.component';
 
 const rutas: Routes = [
   {
@@ -55,6 +56,10 @@ const rutas: Routes = [
       {
         path: 'auditado',
         component: AuditadoComponent
+      },
+      {
+        path: 'pendientes',
+        component: ListaPendienteComponent
       },
       {
         path: 'form',
@@ -126,7 +131,8 @@ const rutas: Routes = [
     DevolucionComponent,
     RecibidasComponent,
     AsignadasComponent,
-    RevisionComponent
+    RevisionComponent,
+    ListaPendienteComponent
   ],
   imports: [
     BrowserModule,
