@@ -65,8 +65,8 @@
                                                                     </ng-container>
                                                                     <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
                                                                         <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
-                                                                        <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
-                                                                        <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="date">
+                                                                        <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="datetime-local">
+                                                                        <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="datetime-local">
                                                                     </div>
                                                                     <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
                                                                     <ng-container *ngIf="terminado == 'f'">
@@ -279,8 +279,8 @@
                                                         </ng-container>
                                                         <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
                                                             <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
-                                                            <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarSubRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="date">
-                                                            <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="date">
+                                                            <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarSubRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="datetime-local">
+                                                            <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="datetime-local">
                                                         </div>
                                                         <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
                                                         <ng-container *ngIf="terminado == 'f'">

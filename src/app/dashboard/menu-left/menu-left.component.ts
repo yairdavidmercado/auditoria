@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { StoreService } from './../../services/store.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 @Component({
@@ -9,12 +10,14 @@ import { Router } from '@angular/router';
 export class MenuLeftComponent implements OnInit {
   modalRef: BsModalRef;
   buscarAdmision:string = '';
+  acceder:boolean = false; 
   config = {
     backdrop: true,
     ignoreBackdropClick: false,
     class: 'modal-sm'
   }
   constructor(
+    public _storeServises: StoreService,
     private modalService: BsModalService,
     private _router: Router
   ) { }
@@ -28,6 +31,11 @@ export class MenuLeftComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (typeof this._storeServises.dataSession !== 'undefined') {
+      if (this._storeServises.dataSession[0]["rol"] == '1') {
+        this.acceder = true;
+      }
+    }
   }
 
 }
