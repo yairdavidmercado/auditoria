@@ -130,7 +130,8 @@ export class FormComponent implements OnInit {
     this._FormService.guardarjustificacion(params).subscribe(
       resp => [
         this.hallazgo(this.cod_audi),
-        console.log(resp)
+        console.log(resp),
+        this.explicacion = ''
       ], 
       err => [
         //this._storeServises.loading = false,
@@ -151,7 +152,7 @@ export class FormComponent implements OnInit {
 
     sweetAlert({
       title: "Advertencia!",
-      text: "¿Estas seguro que deseas anular la auditoría N° "+this.cod_audi+" ?",
+      text: "¿Estas seguro que deseas finalizar la auditoría N° "+this.cod_audi+" ?",
       icon: "danger",
       buttons: true,
       dangerMode: true,
