@@ -26,12 +26,14 @@
                         <thead>
                             <tr>
                                 <td style="width: 10px"></td>
+                                <td style="width: 10px">Auditoría</td>
                                 <td style="width: 10px">Admisión</td>
                                 <td>Realizado por</td>
                                 <td>Aseguradora</td>
                                 <td>Servicio</td>
                                 <td>cama</td>
-                                <td>fecha</td>
+                                <td style="width: 80px">Fecha de inicio</td>
+                                <td style="width: 80px">Fecha de terminación</td>
                                 <td style="width: 10px"></td>
                               </tr>
                         </thead>
@@ -43,12 +45,14 @@
                                       <i class="fas fa-eye"></i>
                                   </a>
                               </td>
+                              <td style="cursor: pointer;">{{item.cod_audi}}</td>
                               <td style="cursor: pointer;">{{item.cod_admi}}</td>
                               <td style="cursor: pointer;">{{item.nom_usua}}</td>
                               <td style="cursor: pointer;">{{item.eps}}</td>
                               <td style="cursor: pointer;">{{item.servicio}}</td>
                               <td style="cursor: pointer;">{{item.cama}}</td>
                               <td style="cursor: pointer;">{{item.fechacrea}}</td>
+                              <td style="cursor: pointer;">{{item.fecha_final}}</td>
                               <td>
                                 <a (click)="detailCenso(item.cod_admi)" href="#List-{{ i }}" data-toggle="collapse">
                                     <i class="fas fa-plus"></i>
