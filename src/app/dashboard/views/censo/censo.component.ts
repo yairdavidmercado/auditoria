@@ -42,7 +42,7 @@ export class CensoComponent implements OnInit {
 
   mostrarTable(page:number, admision:string){
     this._storeServises.loading = true
-    this._CensoService.censo(page, admision).subscribe(
+    this._CensoService.censo(page, admision, this._storeServises.dataSession[0]["perfil"]).subscribe(
       resp => [
         this.dataCenso = resp,
         this.totalRows = resp['data'][0]['totalrows'],
@@ -91,8 +91,8 @@ export class CensoComponent implements OnInit {
     
   }
 
-  iniciarAuditoria(cod_admi:string, cod_audi:string){
-    this._router.navigateByUrl('/dashboard/form?cod_admi='+cod_admi+'&cod_audi='+cod_audi)
+  iniciarAuditoria(cod_admi:string, cod_audi:string, estado:string){
+    this._router.navigateByUrl('/dashboard/form?cod_admi='+cod_admi+'&cod_audi='+cod_audi+'&estado='+estado)
   }
 
   imprimirAuditoria(cod_admi:string, perfil:string, cod_audi:string){

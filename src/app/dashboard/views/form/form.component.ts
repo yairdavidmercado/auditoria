@@ -31,6 +31,7 @@ export class FormComponent implements OnInit {
   dataPaciente:any[] = []
   cod_admi:string = this._route.snapshot.queryParamMap.get('cod_admi')
   cod_audi:string = this._route.snapshot.queryParamMap.get('cod_audi')
+  estadoInicio:string = this._route.snapshot.queryParamMap.get('estado')
 
   dataSubForm:any[] = []
   id_dependencia:string = ''
@@ -463,7 +464,7 @@ export class FormComponent implements OnInit {
     this._usuarioServises.info_paciente(params).subscribe(
       resp => [
         this.dataPaciente = resp["data"][0],
-        this.crearAuditoria(),
+        this.ConfirmarCrearAuditoria(),
         console.log(resp)
       ], 
       err => [
@@ -477,6 +478,26 @@ export class FormComponent implements OnInit {
         //this._storeServises.loading = false
       ]
     )
+  }
+
+  ConfirmarCrearAuditoria(){
+    if (this.estadoInicio == 'f') {
+      this.crearAuditoria()
+    }else{
+      sweetAlert({
+        title: "Advertencia!",
+        text: "¿Estas seguro que deseas crear una nueva auditoria?",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          this.crearAuditoria()
+        } else {
+          this._router.navigateByUrl('/dashboard/censo')
+        }
+      });
+    }
   }
 
   validarNueva(id_auditoria:string = '0'){

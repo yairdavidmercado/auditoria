@@ -43,7 +43,7 @@ export class ListaPendienteComponent implements OnInit {
 
   mostrarTable(page:number, admision:string){
     this._storeServises.loading = true
-    this._CensoService.pendientes(page, admision).subscribe(
+    this._CensoService.pendientes(page, admision, this._storeServises.dataSession[0]["perfil"]).subscribe(
       resp => [
         this.dataCenso = resp,
         this.totalRows = resp['data'][0]['totalrows'],

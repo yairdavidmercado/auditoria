@@ -10,12 +10,12 @@ export class CensoService {
     private _http: HttpClient,
     public _storeServises: StoreService
   ) { }
-  censo(page:number, admision:string){
-    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_censo.php?page='+page+'&admision='+admision)
+  censo(page:number, admision:string, perfil:number){
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/sel_censo_pg.php?page='+page+'&admision='+admision+'&perfil='+perfil)
   }
 
-  pendientes(page:number, admision:string){
-    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_pendientes.php?page='+page+'&admision='+admision)
+  pendientes(page:number, admision:string, perfil:number){
+    return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/table_pendientes.php?page='+page+'&admision='+admision+'&perfil='+perfil)
   }
 
   detailAdmision(params:any){
