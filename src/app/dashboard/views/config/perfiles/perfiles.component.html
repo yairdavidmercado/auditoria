@@ -9,19 +9,50 @@
                                 <td style="width: 10px"></td>
                                 <td style="width: 10px">Id</td>
                                 <td>Nombre</td>
+                                <td style="width: 10px"></td>
                             </tr>
                       </thead>
                       <tbody style="font-size: 10px;" >
                         <ng-container #table *ngFor="let item of dataPerfiles; index as i; first as isFirst" > 
-                          <tr class="card-header" id="headingOne">
-                            <td>
-                                <a style="color:slateblue; cursor: pointer;" (click)="editPerfil(item.id, item.descripcion)">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                            <td style="cursor: pointer;">{{item.id}}</td>
-                            <td style="cursor: pointer;">{{item.descripcion}}</td>
-                        </tr>
+                            <tr class="card-header" id="headingOne">
+                                <td>
+                                    <a style="color:slateblue; cursor: pointer;" (click)="editPerfil(item.id, item.descripcion)">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td style="cursor: pointer;">{{item.id}}</td>
+                                <td style="cursor: pointer;">{{item.descripcion}}</td>
+                                <td>
+                                    <a (click)="detailPerfiles(item.id)" href="#List-{{ i }}" data-toggle="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="List-{{ i }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <td colspan="12">
+                                    <div class="card-body">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6" *ngFor="let item of dataDetailPerfil; index as i; first as isFirst">
+                                                        <!-- checkbox -->
+                                                        <div class="form-group">
+                                                          <div class="custom-control custom-checkbox">
+                                                            <input *ngIf="item.permiso == null" (click)="CheckPerfil(1, item.id)" class="custom-control-input" type="checkbox" id="{{item.id}}">
+                                                            <input *ngIf="item.permiso != null" checked (click)="CheckPerfil(2, item.id)"  class="custom-control-input" type="checkbox" id="{{item.id}}">
+                                                            <label for="{{item.id}}" class="custom-control-label">{{item.nombre}}</label>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ng-container  >
+                                                    
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                         </ng-container>
                       </tbody>
                     </table>

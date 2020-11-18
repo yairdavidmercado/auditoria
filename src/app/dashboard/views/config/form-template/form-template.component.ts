@@ -4,6 +4,7 @@ import { StoreService } from "../../../../services/store.service";
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TipoAuditoriaService } from "../../../../services/tipo-auditoria.service";
 declare var $:any
 declare var Swal:any
 @Component({
@@ -24,6 +25,7 @@ export class FormTemplateComponent implements OnInit {
 
   idEdit:string  = ''
   valueEdit:string  = ''
+  dataTipoAuditoria:any[] = []
   perfiles:any[] = this._storeServises.dataSession[0]["perfiles"]
   dataValidaciones:any[] = [{
       firstName: ['', Validators.required],
@@ -44,7 +46,8 @@ export class FormTemplateComponent implements OnInit {
     public _storeServises: StoreService,
     private formBuilder: FormBuilder,
     private renderer: Renderer2,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private _TipoAuditoriaService: TipoAuditoriaService,
   ) { }
 
   ngOnInit(): void {
@@ -71,6 +74,7 @@ export class FormTemplateComponent implements OnInit {
 
 
   formulario(id:string){
+    this.mostrarTipoAudiorias(id)
     this.idRadioDependencia = ''
     this.idperfilSelect = id
     let params = {
@@ -330,6 +334,31 @@ export class FormTemplateComponent implements OnInit {
     }else{
       this._storeServises.Notifications('No ha seleccionado el perfil', false)
     } 
+  }
+
+  mostrarTipoAudiorias(id:string){
+    let params = {
+      codigo: '4',
+      codigo1: '',
+      parametro: id,
+      parametro2: ''
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        this.dataTipoAuditoria = resp['resultado'] 
+      ], 
+      err => [
+        this.dataTipoAuditoria = [],
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
   }
 
   updateSubControl(id:string, value:string){

@@ -26,15 +26,53 @@
                                               <button (click)="imprimir('1')" class="dropdown-item" type="button">Imprimir toda la auditoría</button>
                                               <hr>
                                               <button *ngIf="terminado == 'f' && finalizado == 'f'" (click)="openModal(template)" class="dropdown-item" style="color:sandybrown;" type="button">Anular auditoría</button>
-                                              <button *ngIf="terminado == 't' && finalizado == 'f'" (click)="openModal2(template2)" class="dropdown-item" style="color: red;" type="button">Finalizar auditoría</button>
+                                              <div *ngIf="finalizarTipoAuditoria == 'f'">
+                                                <button *ngIf="terminado == 't' && finalizado == 'f'" (click)="openModal2(template2)" class="dropdown-item" style="color: red;"  type="button">Finalizar auditoría</button>
+                                              </div>
                                             </div>
                                         </div>
+                                    </li>
+                                    <li style="cursor: pointer;" *ngIf="terminado == 't' && rol == '1'" class="nav-item">
+                                        <a class="nav-link" (click)="openModal(template1)" >Abrir auditoría</a>
                                     </li>
                                 </ul>
                             </div>
                         </nav>
                     </div>
                     <div class="card-body" style="font-size: 11px; text-align: justify;">
+                        <div class="row">
+                            <div class="col-sm-12">
+                              <!-- radio -->
+                              <span style="margin-left: 12px; font-size: 12;">SELECCIONAR TIPO DE AUDITORÍA</span>
+                              <hr>
+                              <div class="form-group clearfix">
+                                <div class="icheck-success d-inline" *ngFor="let item of dataTipoAuditoria; index as i; first as isFirst">
+                                  <input type="radio" (click)="CheckTipoAuditoria(item.id)" [disabled]="terminado == 't'" [checked]="id_tipoauditoria == item.id" name="tipoauditoria" id="radio{{item.id}}">
+                                  <label style="margin-right: 9px;" for="radio{{item.id}}">
+                                    {{item.nombre}}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div *ngIf="fechasTipoAuditoria == 't'" class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>Fecha de inicio:</label>
+                                            <div class="input-group date">
+                                                <input type="datetime-local" [(ngModel)]="fecha_ini" name="fecha_ini" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Fecha final:</label>
+                                            <div class="input-group date" id="fecha_final">
+                                                <input type="datetime-local" [(ngModel)]="fecha_fin" name="fecha_fin" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <ng-container *ngFor="let item of dataForm; index as i; first as isFirst">
                             <div class="{{item.class}}" >
                                 <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
@@ -89,7 +127,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <button class="btn btn-info float-right" *ngIf="terminado == 'f'" (click)="terminarAuditoria()" >Terminar auditoría</button>
+                        <button class="btn btn-info float-right" *ngIf="terminado == 'f'" (click)="terminarAuditoria()" [disabled]="id_tipoauditoria == '' || id_tipoauditoria == 0 " >Terminar auditoría</button>
                         <button class="btn btn-info float-right" *ngIf="terminado == 't'" disabled >Terminar auditoría</button>
                     </div>
                 </form>
@@ -189,7 +227,7 @@
  
 <ng-template #template>
   <div class="modal-header">
-    <p class="modal-title pull-left"> Explique detalladamente porqué quieres eliminar la auditoría.</p>
+    <p class="modal-title pull-left"> Explique detalladamente porqué quieres anular la auditoría.</p>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -205,6 +243,25 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #template1>
+    <div class="modal-header">
+      <p class="modal-title pull-left"> Explique detalladamente porqué quieres abrir la auditoría.</p>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label for="">Explicación</label>
+      <p>(Su explicación debe contener mínimo 20 caracteres)</p>
+      <div class="form-group">
+          <textarea [(ngModel)]="explicacion" [value]="explicacion" class="form-control"></textarea>
+      </div>
+      <div class="form-button">
+          <button (click)="openAuditoria()" class="btn btn-danger float-right">Abrir auditoría</button>
+      </div>
+    </div>
+  </ng-template>
 
 <ng-template #template2>
     <div class="modal-header">

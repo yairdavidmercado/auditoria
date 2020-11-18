@@ -3,6 +3,7 @@ import { FormService } from '../../../services/form.service';
 import { StoreService } from "../../../services/store.service";
 import { UsuarioService } from "../../../services/usuario.service";
 import { CensoService } from "../../../services/censo.service";
+import { TipoAuditoriaService } from "../../../services/tipo-auditoria.service";
 import { ActivatedRoute ,Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -26,12 +27,23 @@ export class FormComponent implements OnInit {
   finalizado = ''
   terminado = ''
   anulado = ''
+  rol = this._storeServises.dataSession[0]["rol"]
+  id_tipoauditoria = ''
   selectedValue = ''
   explicacion:string = ''
   dataPaciente:any[] = []
   cod_admi:string = this._route.snapshot.queryParamMap.get('cod_admi')
   cod_audi:string = this._route.snapshot.queryParamMap.get('cod_audi')
   estadoInicio:string = this._route.snapshot.queryParamMap.get('estado')
+
+  //variables de tipo de auditoria (validaciones)
+  dataTipoAuditoria:any[] = [] 
+  finalizarTipoAuditoria:string = ''
+  fecha_egreTipoAuditoria:string = ''
+  fechasTipoAuditoria:string = ''
+
+  fecha_ini:string = ''
+  fecha_fin:string = ''
 
   dataSubForm:any[] = []
   id_dependencia:string = ''
@@ -45,13 +57,15 @@ export class FormComponent implements OnInit {
     public _storeServises: StoreService,
     private _usuarioServises: UsuarioService,
     private _censoService: CensoService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private _TipoAuditoriaService: TipoAuditoriaService,
   ) { }
 
   ngOnInit(): void {
     setTimeout(()=>{
       this.validarNueva(),
       this.mostrarUsuarios()
+      this.mostrarTipoAudiorias(this._storeServises.dataSession[0]["perfil"])
     });
 
     $('.select2').select2()
@@ -107,6 +121,29 @@ export class FormComponent implements OnInit {
     .then((willDelete) => {
       if (willDelete) {
         this.anularAuditoria()
+      } else {
+        // sweetAlert("Your imaginary file is safe!");
+      }
+    });
+  }
+
+  openAuditoria(){
+
+    if (this.explicacion.trim().length < 20) {
+      sweetAlert("Su explicación solo tiene "+this.explicacion.trim().length+" caracteres, recuerde que debe superar los 20 caracteres para poder continuar.")
+      return false;
+    }
+
+    sweetAlert({
+      title: "Advertencia!",
+      text: "¿Estas seguro que deseas abrir la auditoría N° "+this.cod_audi+" ?",
+      icon: "danger",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.abrirAuditoria()
       } else {
         // sweetAlert("Your imaginary file is safe!");
       }
@@ -228,6 +265,38 @@ export class FormComponent implements OnInit {
 
   }
 
+  abrirAuditoria(){
+
+    let params = {
+      codigo: "5",
+      parametro : this.cod_audi,
+      parametro2 : this._storeServises.dataSession[0]["perfil"],
+      comentario : this.explicacion,
+      cod_usua : this._storeServises.dataSession[0]["cod_usua"]
+    }
+    this._storeServises.loading = true
+    this._censoService.terminarAuditoria(params).subscribe(
+      resp => [
+        sweetAlert("La auditoría N° "+this.cod_audi+" se ha abierto satisfactoriamente."),
+        this.modalRef.hide(),
+        this._router.navigateByUrl('/dashboard/form?cod_admi='+this.cod_admi+'&cod_audi='+this.cod_audi),
+        this.formulario(this.cod_audi),
+        console.log(resp)
+      ], 
+      err => [
+        //this._storeServises.loading = false,
+        this._storeServises.Notifications(err.error["message"],err.error["success"]),
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false,
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+
+  }
+
   anularAuditoria(){
 
     let params = {
@@ -293,6 +362,18 @@ export class FormComponent implements OnInit {
   }
 
   terminarAuditoria(){
+    if (this.fechasTipoAuditoria == 't') {
+      if (this.ValidarFechasAuditoria()) {
+        this.guardarFechasTipoAuditoria()
+        this.terminarAuditoriaFinal()
+        return false 
+      }
+    }else{
+      this.terminarAuditoriaFinal()
+    } 
+  }
+
+  terminarAuditoriaFinal(){
     this.verificarRespuesta()
     if (this.idValidation.length > 0) {
       //alert(this.idValidation)
@@ -320,7 +401,6 @@ export class FormComponent implements OnInit {
       });
     }
   }
-
   formulario(id_auditoria:string = '0'){
     let params = {
       codigo: "1",
@@ -332,9 +412,13 @@ export class FormComponent implements OnInit {
     this._FormService.formulario(params).subscribe(
       resp => [
         this.dataForm = resp["data"],
+        this.fecha_ini = resp["data"][0]["fecha_ini"],
+        this.fecha_fin = resp["data"][0]["fecha_fin"],
         this.finalizado = resp["data"][0]["finalizado"],
         this.terminado = resp["data"][0]["terminado"], 
-        this.anulado = resp["data"][0]["anulado"], 
+        this.anulado = resp["data"][0]["anulado"],
+        this.id_tipoauditoria = resp["data"][0]["tipo"],
+        this.CheckTipoAuditoria(this.id_tipoauditoria), 
         this.datall = resp["datall"],
         console.log(resp)
       ], 
@@ -770,6 +854,142 @@ export class FormComponent implements OnInit {
       ]
     )
 
+  }
+
+  mostrarTipoAudiorias(id:string){
+    let params = {
+      codigo: '4',
+      codigo1: '',
+      parametro: id,
+      parametro2: ''
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        this.dataTipoAuditoria = resp['resultado'] 
+      ], 
+      err => [
+        this.dataTipoAuditoria = [],
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+  }
+
+  CheckTipoAuditoria(id:string){
+    let params = {
+      codigo: '5',
+      codigo1: '',
+      parametro: id,
+      parametro2: ''
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        this.guardarTipoAuditoria(resp['resultado']) 
+      ], 
+      err => [
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+  }
+
+  guardarTipoAuditoria(data:any){
+    this.finalizarTipoAuditoria = data[0]['finalizar']
+    this.fecha_egreTipoAuditoria = data[0]['fecha_egre']
+    this.id_tipoauditoria = data[0]['id']
+    
+    if (this.fecha_egreTipoAuditoria == 'f') {
+      if (this.dataPaciente['fecha_salida'] == '1970-01-01') {
+        sweetAlert('Acceso denegado: No se permite realizar '+data[0]['nombre'])
+        return false
+      }
+    }
+
+    this.fechasTipoAuditoria = data[0]['fechas']
+
+    let params = {
+      codigo: '6',
+      codigo1: '1',
+      parametro: this.cod_audi,
+      parametro2: data[0]['id'],
+      parametro3: this._storeServises.dataSession[0]["perfil"]
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        //this.dataTipoAuditoria = resp['resultado']
+      ], 
+      err => [
+        this.dataTipoAuditoria = [],
+        //console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+  }
+
+  ValidarFechasAuditoria(){
+    
+    if (this.fecha_ini.length == 0) {
+      this._storeServises.Notifications("La fecha de inicio no se ha seleccionado", false) 
+     return false 
+    }
+
+    if (this.fecha_fin.length == 0) {
+      this._storeServises.Notifications("La fecha final no se ha seleccionado", false) 
+      return false 
+    }
+    
+    if ((new Date(this.fecha_ini).getTime() > new Date(this.fecha_fin).getTime())) {
+      this._storeServises.Notifications('la fecha inicio es mayor a la fecha final', false)
+      return false
+    }else{
+      //this._storeServises.Notifications('la fecha inicio es menor a la fecha final', false)
+      return true
+    }
+  }
+
+  guardarFechasTipoAuditoria(){
+
+    let params = {
+      codigo: '1',
+      id: this.cod_audi,
+      perfil: this._storeServises.dataSession[0]["perfil"],
+      fecha_ini: this.fecha_ini,
+      fecha_fin: this.fecha_fin
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.guardarFechasTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        //this.dataTipoAuditoria = resp['resultado']
+      ], 
+      err => [
+        this.dataTipoAuditoria = [],
+        //console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
   }
 
 }

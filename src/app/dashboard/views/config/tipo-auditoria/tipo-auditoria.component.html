@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col-sm-9">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 table-responsive">  
+                    <table style="font-size: 12px;" class="table table-bordered table-striped table-sm" id="accordion">
+                      <thead>
+                            <tr>
+                                <td style="width: 10px"></td>
+                                <td style="width: 10px">Id</td>
+                                <td>Nombre</td>
+                                <td style="width: 20px">Validar finalización</td>
+                                <td style="width: 20px" >Validar egreso</td>
+                                <td style="width: 20px" >Validar fechas</td>
+                                <td style="width: 10px"></td>
+                            </tr>
+                      </thead>
+                      <tbody style="font-size: 10px;" >
+                        <ng-container #table *ngFor="let item of dataTipoAuditoriaes; index as i; first as isFirst" > 
+                            <tr class="card-header" id="headingOne">
+                                <td>
+                                    <a style="color:slateblue; cursor: pointer;" (click)="editTipoAuditoria(item.id, item.nombre, item.finalizar, item.fecha_egre, item.fechas)">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td style="cursor: pointer;">{{item.id}}</td>
+                                <td style="cursor: pointer;">{{item.nombre}}</td>
+                                <td style="cursor: pointer;">{{item.finalizar}}</td>
+                                <td style="cursor: pointer;">{{item.fecha_egre}}</td>
+                                <td style="cursor: pointer;">{{item.fechas}}</td>
+                                <td>
+                                    <a (click)="detailTipoAuditoriaes(item.id)" href="#List-{{ i }}" data-toggle="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="List-{{ i }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <td colspan="12">
+                                    <div class="card-body">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <!-- checkbox -->
+                                                        <div class="form-group">
+                                                          <div class="custom-control custom-checkbox">
+                                                            
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ng-container  >
+                                                    
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div *ngIf="EditTipoAuditoria == 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Crear TipoAuditoria</h3>
+            </div>
+            <div class="card-body">
+                <div >
+                    <div class="form-group">
+                        <label>Nombre del TipoAuditoria</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="textTipoAuditoria" [value]="textTipoAuditoria"  class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Seleccionar Validaciones</label>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox1" (click)="cambiarValor('finalizar', finalizar )" [checked]="finalizar == 't'">
+                          <label for="customCheckbox1" class="custom-control-label">Restringir finalización</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox2" (click)="cambiarValor('fecha_egre', fecha_egre )" [checked]="fecha_egre == 't'">
+                          <label for="customCheckbox2" class="custom-control-label">Realizar auditoría sí posee fecha de egreso</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" (click)="cambiarValor('fechas', fechas )" [checked]="fechas == 't'">
+                            <label for="customCheckbox3" class="custom-control-label">Mostrar rango de fecha</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="guardarTipoAuditoria()" class="btn btn-success btn-block">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="EditTipoAuditoria != 0" class="card">
+            <div class="card-header">
+                <h3 class="card-title" >Editar TipoAuditoria</h3>
+            </div>
+            <div class="card-body">
+                <div >
+                    <div class="form-group">
+                        <input type="text" class="form-control" disabled [value]="EditTipoAuditoria" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre del TipoAuditoria</label>
+                        <input type="text"  maxlength="255" [(ngModel)]="textTipoAuditoria" [value]="textTipoAuditoria"  class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Seleccionar Validaciones</label>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox4" (click)="cambiarValor('finalizar', finalizar )" [checked]="finalizar == 't'">
+                          <label for="customCheckbox4" class="custom-control-label">Restringir finalización</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox5" (click)="cambiarValor('fecha_egre', fecha_egre )" [checked]="fecha_egre == 't'">
+                          <label for="customCheckbox5" class="custom-control-label">Realizar auditoría sí posee fecha de egreso</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                          <input class="custom-control-input" type="checkbox" id="customCheckbox6" (click)="cambiarValor('fechas', fechas )" [checked]="fechas == 't'">
+                          <label for="customCheckbox6" class="custom-control-label">Mostrar rango de fecha</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button (click)="guardarTipoAuditoria()" class="btn btn-success btn-block">Registrar</button>
+                        <button (click)="NuevoTipoAuditoria()" class="btn btn-primary btn-block">Nuevo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

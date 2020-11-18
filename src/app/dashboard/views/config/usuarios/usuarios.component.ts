@@ -171,7 +171,7 @@ export class UsuariosComponent implements OnInit {
         this.dataDetailUsuario = resp["resultado"]
       ], 
       err => [
-        this.dataUsuarios = [],
+        this.dataDetailUsuario = [],
         console.log(err.error)
       ], 
       () => [

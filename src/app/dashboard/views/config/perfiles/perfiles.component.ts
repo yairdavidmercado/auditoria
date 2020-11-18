@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreService } from "../../../../services/store.service";
 import { UsuarioService } from "../../../../services/usuario.service";
+import { TipoAuditoriaService } from "../../../../services/tipo-auditoria.service";
 declare var sweetAlert:any
 @Component({
   selector: 'app-perfiles',
@@ -11,9 +12,12 @@ export class PerfilesComponent implements OnInit {
   textPerfil:string = ''
   EditPerfil:number = 0
   dataPerfiles:any[] = []
+  detailPerfil:number = 0
+  dataDetailPerfil:any[] = []
   constructor(
     public _storeServises: StoreService,
     private _usuarioServices: UsuarioService,
+    private _TipoAuditoriaService: TipoAuditoriaService,
   ) { }
 
   ngOnInit(): void {
@@ -53,6 +57,61 @@ export class PerfilesComponent implements OnInit {
   editPerfil(id:number, descripcion:string){
     this.textPerfil = descripcion
     this.EditPerfil = id
+  }
+
+  detailPerfiles(id:number){
+    this.detailPerfil = id
+    this.TiposAuditoria(this.detailPerfil)
+  }
+
+  TiposAuditoria(id:number){
+    let params = {
+      codigo: '2',
+      codigo1: '',
+      parametro: id,
+      parametro2: ''
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        this.dataDetailPerfil = resp["resultado"]
+      ], 
+      err => [
+        this.dataDetailPerfil = [],
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
+  }
+
+  CheckPerfil(id:number, item:number){
+    let params = {
+      codigo: '3',
+      codigo1: id,
+      parametro: this.detailPerfil,
+      parametro2: item
+    }
+    this._storeServises.loading = true
+    this._TipoAuditoriaService.tableTipoAuditoria(params).subscribe(
+      resp => [
+        console.log(resp),
+        this.TiposAuditoria(this.detailPerfil)
+      ], 
+      err => [
+        this.dataPerfiles = [],
+        console.log(err.error)
+      ], 
+      () => [
+        this._storeServises.loading = false
+        //this._storeServises.Notifications(this.datas["message"],this.datas["success"]),
+        //this._storeServises.loading = false
+      ]
+    )
   }
 
   guardarPerfil(){

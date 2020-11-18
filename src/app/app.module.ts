@@ -29,6 +29,7 @@ import { RecibidasComponent } from './dashboard/views/devolucion/recibidas/recib
 import { AsignadasComponent } from './dashboard/views/devolucion/asignadas/asignadas.component';
 import { RevisionComponent } from './dashboard/views/devolucion/revision/revision.component';
 import { ListaPendienteComponent } from './dashboard/views/lista-pendiente/lista-pendiente.component';
+import { TipoAuditoriaComponent } from './dashboard/views/config/tipo-auditoria/tipo-auditoria.component';
 
 const rutas: Routes = [
   {
@@ -109,6 +110,10 @@ const rutas: Routes = [
             path: 'perfiles',
             component: PerfilesComponent
           },
+          {
+            path: 'tipoauditoria',
+            component: TipoAuditoriaComponent
+          },
         ]
       }
     ]
@@ -132,7 +137,8 @@ const rutas: Routes = [
     RecibidasComponent,
     AsignadasComponent,
     RevisionComponent,
-    ListaPendienteComponent
+    ListaPendienteComponent,
+    TipoAuditoriaComponent
   ],
   imports: [
     BrowserModule,

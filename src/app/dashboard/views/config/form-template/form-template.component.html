@@ -25,6 +25,20 @@
                             <option value="1">Seleccionar perfil </option>
                             <option *ngFor="let item of perfiles; index as i; first as isFirst" value="{{item.perfil}}"> {{item.descripcion}}</option>
                         </select>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                              <!-- radio -->
+                              <div class="form-group clearfix">
+                                <div class="icheck-success d-inline" *ngFor="let item of dataTipoAuditoria; index as i; first as isFirst">
+                                  <input type="radio" name="tipoauditoria" id="radio{{item.id}}">
+                                  <label style="margin-right: 9px;" for="radio{{item.id}}">
+                                    {{item.nombre}}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
                         <ng-container *ngFor="let item of dataForm; index as i; first as isFirst">
                             <div class="{{item.class}}" >
                                 <ng-container *ngFor="let item of item.child; index as i; first as isFirst">

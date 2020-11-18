@@ -93,8 +93,12 @@ export class AuditadoComponent implements OnInit {
 
   }
 
-  imprimirAuditoria(cod_admi:string, perfil:string, cod_audi:string){
-    window.open(this._storeServises.baseUrl+'/AppToolsAPI/reports/admin.php?codigo=1&cod_admi='+cod_admi+'&perfil='+perfil+'&cod_audi='+cod_audi)
+  imprimirAuditoria(codigo:string, cod_admi:string, perfil:string, cod_audi:string){
+    if (codigo == '1') {
+      window.open(this._storeServises.baseUrl+'/AppToolsAPI/reports/hallazgo.php?codigo=1&cod_admi='+cod_admi+'&perfil='+perfil+'&cod_audi='+cod_audi)
+    }else if (codigo == '2') {
+      window.open(this._storeServises.baseUrl+'/AppToolsAPI/reports/admin.php?codigo=1&cod_admi='+cod_admi+'&perfil='+perfil+'&cod_audi='+cod_audi)
+    }
   }
 
 }

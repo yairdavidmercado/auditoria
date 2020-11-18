@@ -21,7 +21,6 @@ export class UsuarioService {
     return this._http.get<any[]>(this._storeServises.baseUrl+'/APIExterno/sel_info_paciente.php?codigo='+params.codigo+'&parametro='+params.parametro )
   }
 
-  //informacion paciente
   tableUsuarios(page:number, nombre:string){
     return this._http.get<any[]>(this._storeServises.baseUrl+'/AppToolsAPI/table_usuarios.php?page='+page+'&nombre='+nombre)
   }

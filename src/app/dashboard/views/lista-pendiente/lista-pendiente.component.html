@@ -87,7 +87,10 @@
                                                 {{item.fecha_solicitud}}
                                               </td>
                                               <td>
-                                                <a style="cursor:pointer; color:blue" (click)="imprimirAuditoria(item.cod_admi, perfil, item.cod_audi)">Imprimir</a>
+                                                <a style="cursor:pointer; color:blue" (click)="imprimirAuditoria('1', item.cod_admi, perfil, item.cod_audi)"> imprimir Hallazgos</a>
+                                              </td>
+                                              <td>
+                                                <a style="cursor:pointer; color:blue" (click)="imprimirAuditoria('2', item.cod_admi, perfil, item.cod_audi)">Imprimir toda la auditoría</a>
                                               </td>
                                             </tr>
                                           </ng-container>
