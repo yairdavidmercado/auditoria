@@ -60,70 +60,72 @@
                                         <div class="col-sm-6">
                                             <label>Fecha de inicio:</label>
                                             <div class="input-group date">
-                                                <input type="datetime-local" [(ngModel)]="fecha_ini" name="fecha_ini" class="form-control">
+                                                <input type="datetime-local" (focusout)="validar_contenido_fechas()" [(ngModel)]="fecha_ini" name="fecha_ini" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Fecha final:</label>
                                             <div class="input-group date" id="fecha_final">
-                                                <input type="datetime-local" [(ngModel)]="fecha_fin" name="fecha_fin" class="form-control">
+                                                <input type="datetime-local" (focusout)="validar_contenido_fechas()" [(ngModel)]="fecha_fin" name="fecha_fin" class="form-control">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <ng-container *ngFor="let item of dataForm; index as i; first as isFirst">
-                            <div class="{{item.class}}" >
-                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
-                                    <div class="{{item.class}}">
-                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
-                                            <div class="{{item.class}}">
-                                                <p *ngIf="item.class == 'card-title'" class="{{item.class}}">{{item.value}}</p>
-                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
-                                                    <div class="{{item.class}}">
-                                                        <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
-                                                            <p *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
-                                                            <div class="{{item.class}}">
-                                                                <span [attr.id]="item.id"></span>
-                                                                <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
-                                                                    <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
-                                                                        <div *ngIf="terminado == 'f'" class="icheck-primary d-inline" >
-                                                                            <input *ngIf="item.etiqueta == 'input'" (click)="validarGuardarRespuesta(item.id_especial, '1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
-                                                                            <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
-                                                                                {{item.value}}
-                                                                            </label>
+                        <div *ngIf="terminado_tipo_auditoria == 't'" >
+                            <ng-container  *ngFor="let item of dataForm; index as i; first as isFirst">
+                                <div class="{{item.class}}" >
+                                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                        <div class="{{item.class}}">
+                                            <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                <div class="{{item.class}}">
+                                                    <p *ngIf="item.class == 'card-title'" class="{{item.class}}">{{item.value}}</p>
+                                                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                        <div class="{{item.class}}">
+                                                            <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                <p *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                                <div class="{{item.class}}">
+                                                                    <span [attr.id]="item.id"></span>
+                                                                    <ng-container *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                        <ng-container class="{{item.class}}" *ngFor="let item of item.child; index as i; first as isFirst">
+                                                                            <div *ngIf="terminado == 'f'" class="icheck-primary d-inline" >
+                                                                                <input *ngIf="item.etiqueta == 'input'" (click)="validarGuardarRespuesta(item.id_especial, '1', item.id, item.value, item.dependencia)" [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                                <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
+                                                                                    {{item.value}}
+                                                                                </label>
+                                                                            </div>
+                                                                            <div *ngIf="terminado == 't'" class="icheck-primary d-inline" >
+                                                                                <input *ngIf="item.etiqueta == 'input'" disabled [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
+                                                                                <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
+                                                                                    {{item.value}}
+                                                                                </label>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                        <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
+                                                                            <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
+                                                                            <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="datetime-local">
+                                                                            <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="datetime-local">
                                                                         </div>
-                                                                        <div *ngIf="terminado == 't'" class="icheck-primary d-inline" >
-                                                                            <input *ngIf="item.etiqueta == 'input'" disabled [checked]="item.value == item.respuesta" id="radioPrimary{{item.id}}" type="{{item.type}}" name="radio{{item.dependencia}}">
-                                                                            <label *ngIf="item.etiqueta == 'input'" for="radioPrimary{{item.id}}">
-                                                                                {{item.value}}
-                                                                            </label>
-                                                                        </div>
+                                                                        <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
+                                                                        <ng-container *ngIf="terminado == 'f'">
+                                                                            <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="terminado == 't'">
+                                                                            <textarea *ngIf="item.etiqueta == 'textarea'" disabled class="{{item.class}}">{{item.respuesta}}</textarea>
+                                                                        </ng-container>
                                                                     </ng-container>
-                                                                    <div *ngIf="item.type == 'date'"style="margin-top: 7px;">
-                                                                        <p style="margin-top: 5px; margin-left: 5px;" >{{item.value}}</p>
-                                                                        <input *ngIf="terminado == 'f'" class="form-control" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" [value]="item.respuesta" type="datetime-local">
-                                                                        <input *ngIf="terminado == 't'" class="form-control" disabled [value]="item.respuesta" type="datetime-local">
-                                                                    </div>
-                                                                    <p style="margin-top: 5px; margin-left: 5px;" *ngIf="item.etiqueta == 'p'" >{{item.value}}</p>
-                                                                    <ng-container *ngIf="terminado == 'f'">
-                                                                        <textarea *ngIf="item.etiqueta == 'textarea'" (focusout)="guardarRespuesta('2', item.id, $event.target.value, item.dependencia)" class="{{item.class}}">{{item.respuesta}}</textarea>
-                                                                    </ng-container>
-                                                                    <ng-container *ngIf="terminado == 't'">
-                                                                        <textarea *ngIf="item.etiqueta == 'textarea'" disabled class="{{item.class}}">{{item.respuesta}}</textarea>
-                                                                    </ng-container>
-                                                                </ng-container>
-                                                            </div>
-                                                        </ng-container>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </ng-container>
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">

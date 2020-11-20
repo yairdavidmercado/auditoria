@@ -41,6 +41,7 @@ export class FormComponent implements OnInit {
   finalizarTipoAuditoria:string = ''
   fecha_egreTipoAuditoria:string = ''
   fechasTipoAuditoria:string = ''
+  terminado_tipo_auditoria:string = 'f'
 
   fecha_ini:string = ''
   fecha_fin:string = ''
@@ -882,6 +883,7 @@ export class FormComponent implements OnInit {
   }
 
   CheckTipoAuditoria(id:string){
+    this.terminado_tipo_auditoria = 'f'
     let params = {
       codigo: '5',
       codigo1: '',
@@ -905,16 +907,26 @@ export class FormComponent implements OnInit {
     )
   }
 
+  validar_contenido_fechas(){
+    this.terminado_tipo_auditoria = 'f'
+    if (this.fecha_ini.length > 0 && this.fecha_fin.length ) {
+      this.terminado_tipo_auditoria = 't'
+    }
+  }
+
   guardarTipoAuditoria(data:any){
     this.finalizarTipoAuditoria = data[0]['finalizar']
     this.fecha_egreTipoAuditoria = data[0]['fecha_egre']
     this.id_tipoauditoria = data[0]['id']
     
     if (this.fecha_egreTipoAuditoria == 'f') {
+      this.validar_contenido_fechas()
       if (this.dataPaciente['fecha_salida'] == '1970-01-01') {
         sweetAlert('Acceso denegado: No se permite realizar '+data[0]['nombre'])
         return false
       }
+    }else{
+      this.terminado_tipo_auditoria = 't'
     }
 
     this.fechasTipoAuditoria = data[0]['fechas']

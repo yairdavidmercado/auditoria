@@ -30,6 +30,7 @@ import { AsignadasComponent } from './dashboard/views/devolucion/asignadas/asign
 import { RevisionComponent } from './dashboard/views/devolucion/revision/revision.component';
 import { ListaPendienteComponent } from './dashboard/views/lista-pendiente/lista-pendiente.component';
 import { TipoAuditoriaComponent } from './dashboard/views/config/tipo-auditoria/tipo-auditoria.component';
+import { SeguimientoComponent } from './dashboard/views/seguimiento/seguimiento.component';
 
 const rutas: Routes = [
   {
@@ -65,6 +66,10 @@ const rutas: Routes = [
       {
         path: 'form',
         component: FormComponent
+      },
+      {
+        path: 'seguimiento',
+        component: SeguimientoComponent
       },
       {
         path: 'objeciones',
@@ -138,7 +143,8 @@ const rutas: Routes = [
     AsignadasComponent,
     RevisionComponent,
     ListaPendienteComponent,
-    TipoAuditoriaComponent
+    TipoAuditoriaComponent,
+    SeguimientoComponent
   ],
   imports: [
     BrowserModule,
